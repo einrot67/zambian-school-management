@@ -1,0 +1,12 @@
+"use client";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
+import { Bell, Moon, Sun, LogOut, User } from "lucide-react";
+import { useTheme } from "next-themes";
+interface HeaderProps { user: { name?: string | null; email?: string | null; role?: string; }; }
+export function DashboardHeader({ user }: HeaderProps) {
+  const { theme, setTheme } = useTheme();
+  return <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background px-4 lg:px-8"><h2 className="text-lg font-semibold lg:text-xl">School Management System</h2><div className="flex items-center gap-4"><Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}><Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" /><Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" /><span className="sr-only">Toggle theme</span></Button><Button variant="ghost" size="icon" className="relative"><Bell className="h-5 w-5" /><span className="absolute right-1 top-1 flex h-2 w-2 rounded-full bg-destructive" /><span className="sr-only">Notifications</span></Button><DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" className="relative h-9 w-9 rounded-full"><Avatar className="h-9 w-9"><AvatarFallback className="bg-primary text-primary-foreground">{user.name?.charAt(0) || "U"}</AvatarFallback></Avatar></Button></DropdownMenuTrigger><DropdownMenuContent align="end" className="w-56"><div className="flex flex-col space-y-1 p-2"><p className="text-sm font-medium">{user.name}</p><p className="text-xs text-muted-foreground">{user.email}</p></div><DropdownMenuItem className="cursor-pointer"><User className="mr-2 h-4 w-4" />Profile</DropdownMenuItem><DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive" onClick={() => signOut({ callbackUrl: "/login" })}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div></header>;
+}

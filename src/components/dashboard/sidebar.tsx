@@ -1,0 +1,17 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { GraduationCap, LayoutDashboard, Users, BookOpen, Calendar, DollarSign, Library, Bus, Home, MessageSquare, Settings, Menu } from "lucide-react";
+interface SidebarProps { user: { name?: string | null; email?: string | null; role?: string; }; }
+const navigation = [{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },{ name: "Students", href: "/dashboard/students", icon: GraduationCap },{ name: "Staff", href: "/dashboard/staff", icon: Users },{ name: "Academics", href: "/dashboard/academics", icon: BookOpen },{ name: "Attendance", href: "/dashboard/attendance", icon: Calendar },{ name: "Fees", href: "/dashboard/fees", icon: DollarSign },{ name: "Library", href: "/dashboard/library", icon: Library },{ name: "Transport", href: "/dashboard/transport", icon: Bus },{ name: "Hostel", href: "/dashboard/hostel", icon: Home },{ name: "Messages", href: "/dashboard/messages", icon: MessageSquare },{ name: "Settings", href: "/dashboard/settings", icon: Settings }];
+export function DashboardSidebar({ user }: SidebarProps) {
+  const pathname = usePathname();
+  return <><Sheet><SheetTrigger asChild className="lg:hidden"><Button variant="ghost" size="icon" className="fixed top-4 left-4 z-40"><Menu className="h-6 w-6" /></Button></SheetTrigger><SheetContent side="left" className="w-72 p-0"><SidebarContent pathname={pathname} /></SheetContent></Sheet><div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col"><SidebarContent pathname={pathname} /></div></>;
+}
+function SidebarContent({ pathname }: { pathname: string }) {
+  return <div className="flex h-full flex-col border-r bg-card"><div className="flex h-16 items-center gap-2 border-b px-6"><div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary"><GraduationCap className="h-6 w-6 text-primary-foreground" /></div><div className="flex flex-col"><span className="text-lg font-bold leading-tight">SchoolMS</span><span className="text-xs text-muted-foreground">Zambia</span></div></div><ScrollArea className="flex-1 px-3 py-4"><nav className="flex flex-col gap-1">{navigation.map((item) => <Link key={item.name} href={item.href} className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors", pathname === item.href || pathname.startsWith(item.href + "/") ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}><item.icon className="h-5 w-5" />{item.name}</Link>)}</nav></ScrollArea><div className="border-t p-4"><div className="flex items-center gap-3 rounded-lg bg-muted p-3"><div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold">A</div><div className="flex flex-col overflow-hidden"><span className="text-sm font-medium truncate">Administrator</span><span className="text-xs text-muted-foreground truncate">admin@school.com</span></div></div></div></div>;
+}
